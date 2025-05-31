@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-    // Extract page number from search parameters.
+    // Extract movie ID from search parameters.
     const { searchParams } = new URL(request.url);
-    const page = searchParams.get("page");
+    const movieID = searchParams.get("movieID");
 
     try {
-        const response = await fetch(`https://jumboboxd.soylemez.net/api/list?page=${page}`);
+        const response = await fetch(`https://jumboboxd.soylemez.net/api/movie?id=${movieID}`);
 
         if (!response.ok) {
             return NextResponse.json(
-                { error: `Failed to fetch page ${page}` },
+                { error: `Failed to fetch movie ${movieID}` },
                 { status: response.status }
             );
         }
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
         const data = await response.json();
         return NextResponse.json(data);
     } catch (error) {
-        console.error(`Error fetching page ${page} from list API: `, error);
+        console.error(`Error fetching movie ${movieID} from movie API: `, error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }

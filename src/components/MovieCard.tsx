@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import ExpandedMovie from "@/components/ExpandedMovie";
 
 interface Movie {
     id: string;
