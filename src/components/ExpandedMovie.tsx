@@ -35,11 +35,11 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
     }, []);
 
     return (
-        <div className="p-6 bg-white rounded-lg shadow-lg max-w-xl mx-auto">
-            <img src={movie?.poster} alt={movie?.title} className="w-full mb-4 rounded" />
-            <h1 className="text-2xl font-bold mb-2">{movie?.title}</h1>
-            <p className="text-sm text-gray-500 mb-2">Year: {movie?.year}</p>
-            <p className="text-base">{movie?.description}</p>
+        <div>
+            <img src={movie?.poster} alt={movie?.title} />
+            <h1>{movie?.title}</h1>
+            <p>Year: {movie?.year}</p>
+            <p>{movie?.description}</p>
         </div>
     );
 }
