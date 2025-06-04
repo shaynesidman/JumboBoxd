@@ -43,9 +43,23 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
                 alt={movie?.title}
                 className="w-full md:w-1/2 h-auto object-contain rounded-lg shadow"
             />
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
                 <h1><span className="font-bold">{movie?.title}</span> ({movie?.year})</h1>
                 <p>{movie?.description}</p>
+                <div className="flex flex-row justify-between">
+                    <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2">
+                        Haven't seen
+                    </button>
+                    
+                    <div className="flex flex-row gap-2">
+                        <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2">
+                            Like
+                        </button>
+                        <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2">
+                            Dislike
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
