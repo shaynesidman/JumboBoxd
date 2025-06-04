@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 type ExpandedMovieProps = {
     movieID: string;
@@ -36,11 +37,16 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
     }, []);
 
     return (
-        <div>
-            <img src={movie?.poster} alt={movie?.title} />
-            <h1>{movie?.title}</h1>
-            <p>Year: {movie?.year}</p>
-            <p>{movie?.description}</p>
+        <div className="flex flex-col md:flex-row gap-6">
+            <img
+                src={movie?.poster}
+                alt={movie?.title}
+                className="w-full md:w-1/2 h-auto object-contain rounded-lg shadow"
+            />
+            <div className="flex flex-col gap-2">
+                <h1><span className="font-bold">{movie?.title}</span> ({movie?.year})</h1>
+                <p>{movie?.description}</p>
+            </div>
         </div>
     );
 }
