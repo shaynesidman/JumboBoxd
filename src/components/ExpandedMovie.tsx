@@ -20,6 +20,7 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
     useEffect(() => {
         async function fetchMovie() {
             try {
+                console.log(movieID)
                 const res = await fetch(`/api/movie?id=${movieID}`);
                 if (!res.ok) throw new Error(`Failed to fetch movie ${movieID}`);
 

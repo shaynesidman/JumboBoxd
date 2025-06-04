@@ -3,7 +3,9 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
     // Extract movie ID from search parameters.
     const { searchParams } = new URL(request.url);
-    const movieID = searchParams.get("movieID");
+    const movieID = searchParams.get("id");
+
+    console.log(movieID)
 
     try {
         const response = await fetch(`https://jumboboxd.soylemez.net/api/movie?id=${movieID}`);
