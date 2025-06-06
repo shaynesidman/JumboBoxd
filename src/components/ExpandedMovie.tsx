@@ -49,15 +49,15 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
                     <h1><span className="font-bold">{movie?.title}</span> ({movie?.year})</h1>
                     <p>{movie?.description}</p>
                     <div className="flex flex-row justify-between">
-                        <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2">
-                            Haven't seen
+                        <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2 hover:cursor-pointer">
+                            Seen?
                         </button>
                         
                         <div className="flex flex-row gap-2">
-                            <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2">
+                            <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2 hover:cursor-pointer">
                                 Like
                             </button>
-                            <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2">
+                            <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2 hover:cursor-pointer">
                                 Dislike
                             </button>
                         </div>
