@@ -5,8 +5,6 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const movieID = searchParams.get("id");
 
-    console.log(movieID)
-
     try {
         const response = await fetch(`https://jumboboxd.soylemez.net/api/movie?id=${movieID}`);
 
