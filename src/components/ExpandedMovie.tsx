@@ -27,7 +27,6 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
     useEffect(() => {
         async function fetchMovie() {
             try {
-                console.log(movieID)
                 const res = await fetch(`/api/movie?id=${movieID}`);
                 if (!res.ok) throw new Error(`Failed to fetch movie ${movieID}`);
 
@@ -40,24 +39,58 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
             }
         }
 
+        async function fetchMovieInfo() {
+            if (!user) return;
+        
+            try {
+                const res = await fetch(`/api/fetchMovie?userId=${user.id}&movieId=${movieID}`);
+                
+                if (res.status === 404) {
+                    // Movie not found for this user - set default values
+                    setSeen(false);
+                    setRating(0);
+                    return;
+                }
+                
+                if (!res.ok) {
+                    throw new Error(`Failed to fetch movie info: ${res.status}`);
+                }
+        
+                const movieInfo = await res.json();
+                
+                // Update state with the fetched data
+                if (movieInfo.movie) {
+                    setSeen(movieInfo.movie.seen || false);
+                    setRating(movieInfo.movie.rating || 0);
+                }
+                
+            } catch (error) {
+                console.error("Error fetching movie information:", error);
+                // Set default values on error
+                setSeen(false);
+                setRating(0);
+            }
+        }
+
         fetchMovie();
+        fetchMovieInfo();
     }, []);
 
     async function handleSeenClick() {
         if (!user || !movie) return;
+
+        setSeen(!seen);
       
         try {
-            const res = await fetch("/api/rate", {
+            const res = await fetch("/api/updateMovie", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     userId: user.id,
                     movieId: movie.id,
-                    seen: true,
+                    seen: !seen,
                 }),
             });
-        
-            setSeen(true);
 
             const data = await res.json();
             if (!res.ok) throw new Error("Failed to mark as seen");
