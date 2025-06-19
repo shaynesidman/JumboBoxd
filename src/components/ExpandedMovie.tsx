@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 
-
 type ExpandedMovieProps = {
     movieID: string;
 };
@@ -19,6 +18,7 @@ type Movie = {
 export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
     const [loading, setLoading] = useState(true);
     const [movie, setMovie] = useState<Movie | null>(null);
+    const [seen, setSeen] = useState(false);
     const [rating, setRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
 
@@ -43,13 +43,53 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
         fetchMovie();
     }, []);
 
-    function handleSeenClick() {
+    async function handleSeenClick() {
+        if (!user || !movie) return;
+      
+        try {
+            const res = await fetch("/api/rate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId: user.id,
+                    movieId: movie.id,
+                    seen: true,
+                }),
+            });
+        
+            setSeen(true);
 
+            const data = await res.json();
+            if (!res.ok) throw new Error("Failed to mark as seen");
+        } catch (error) {
+          console.error("Error updating seen status:", error);
+        }
     }
+      
 
-    function handleRatingClick() {
-
+    async function handleRatingClick(star: number) {
+        if (!user || !movie) return;
+      
+        setRating(star); // TODO: Change this
+      
+        try {
+            const res = await fetch("/api/updateMovie", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId: user.id,
+                    movieId: movie.id,
+                    rating: star,
+                }),
+            });
+        
+            const data = await res.json();
+            if (!res.ok) throw new Error("Failed to rate");
+        } catch (error) {
+            console.error("Error submitting rating:", error);
+        }
     }
+      
 
     if (!loading) {
         return (
@@ -67,7 +107,7 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
                     {user && (
                         <div className="flex flex-row justify-between">
                             <button 
-                                className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2 cursor-pointer"
+                                className={`bg-white shadow-sm hover:shadow-lg ${seen ? `text-green-600` : `text-black`} rounded-md py-1 px-2 cursor-pointer`}
                                 onClick={handleSeenClick}
                             >
                                 Seen?
@@ -77,7 +117,7 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <button
                                         key={star}
-                                        onClick={() => setRating(star)}
+                                        onClick={() => handleRatingClick(star)}
                                         onMouseEnter={() => setHoverRating(star)}
                                         onMouseLeave={() => setHoverRating(0)}
                                         className={`text-2xl transition-colors ${
