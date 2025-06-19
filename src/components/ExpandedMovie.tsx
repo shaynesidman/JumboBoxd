@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+
 
 type ExpandedMovieProps = {
     movieID: string;
@@ -17,6 +19,10 @@ type Movie = {
 export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
     const [loading, setLoading] = useState(true);
     const [movie, setMovie] = useState<Movie | null>(null);
+    const [rating, setRating] = useState(0);
+    const [hoverRating, setHoverRating] = useState(0);
+
+    const { user } = useUser();
 
     useEffect(() => {
         async function fetchMovie() {
@@ -37,6 +43,14 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
         fetchMovie();
     }, []);
 
+    function handleSeenClick() {
+
+    }
+
+    function handleRatingClick() {
+
+    }
+
     if (!loading) {
         return (
             <div className="flex flex-col md:flex-row gap-6">
@@ -48,20 +62,34 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
                 <div className="flex flex-col gap-4">
                     <h1><span className="font-bold">{movie?.title}</span> ({movie?.year})</h1>
                     <p>{movie?.description}</p>
-                    <div className="flex flex-row justify-between">
-                        <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2 cursor-pointer">
-                            Seen?
-                        </button>
-                        
-                        <div className="flex flex-row gap-2">
-                            <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2 hover:cursor-pointer">
-                                Like
+
+                    {/* Render buttons only if users are logged in */}
+                    {user && (
+                        <div className="flex flex-row justify-between">
+                            <button 
+                                className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2 cursor-pointer"
+                                onClick={handleSeenClick}
+                            >
+                                Seen?
                             </button>
-                            <button className="bg-white shadow-sm hover:shadow-lg text-black rounded-md py-1 px-2 hover:cursor-pointer">
-                                Dislike
-                            </button>
+                            
+                            <div className="flex gap-1">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <button
+                                        key={star}
+                                        onClick={() => setRating(star)}
+                                        onMouseEnter={() => setHoverRating(star)}
+                                        onMouseLeave={() => setHoverRating(0)}
+                                        className={`text-2xl transition-colors ${
+                                            (hoverRating || rating) >= star ? "text-yellow-400" : "text-gray-300"
+                                        }`}
+                                    >
+                                    ★
+                                    </button>
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         );
