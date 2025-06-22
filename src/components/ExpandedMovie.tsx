@@ -44,6 +44,7 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
         
             try {
                 const res = await fetch(`/api/fetchMovie?userId=${user.id}&movieId=${movieID}`);
+                if (!res.ok) throw new Error(`Failed to fetch movie ${movieID}'s info`);
                 
                 if (res.status === 404) {
                     // Movie not found for this user - set default values
