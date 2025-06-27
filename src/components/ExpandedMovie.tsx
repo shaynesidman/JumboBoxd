@@ -31,8 +31,10 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
                 if (!res.ok) throw new Error(`Failed to fetch movie ${movieID}`);
 
                 const movieInfo = await res.json();
-                setMovie(movieInfo);
-                setLoading(false);
+                if (movieInfo) {
+                    setMovie(movieInfo);
+                    setLoading(false);
+                }
             } catch (error) {
                 console.error("Error fetching movies: ", error);
                 setMovie(null);

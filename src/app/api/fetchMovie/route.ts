@@ -20,10 +20,7 @@ export async function GET(req: Request) {
         `;
 
         if (data.length === 0) {
-            return NextResponse.json(
-                { error: "Movie not found for this user" }, 
-                { status: 404 }
-            );
+            return NextResponse.json({ movie: null });
         }
 
         return NextResponse.json({ movie: data[0] });
