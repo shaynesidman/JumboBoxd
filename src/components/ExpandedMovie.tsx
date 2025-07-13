@@ -95,7 +95,6 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
                 }),
             });
 
-            const data = await res.json();
             if (!res.ok) throw new Error("Failed to mark as seen");
         } catch (error) {
           console.error("Error updating seen status:", error);
@@ -106,7 +105,7 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
     async function handleRatingClick(star: number) {
         if (!user || !movie) return;
       
-        setRating(star); // TODO: Change this
+        setRating(star);
       
         try {
             const res = await fetch("/api/updateMovie", {
@@ -119,7 +118,6 @@ export default function ExpandedMovie({ movieID }: ExpandedMovieProps) {
                 }),
             });
         
-            const data = await res.json();
             if (!res.ok) throw new Error("Failed to rate");
         } catch (error) {
             console.error("Error submitting rating:", error);

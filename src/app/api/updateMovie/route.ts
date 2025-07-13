@@ -4,7 +4,7 @@ import { sql } from "@/lib/db";
 export async function POST(req: Request) {
     const { userId, movieId, rating, seen } = await req.json();
 
-    if (!userId || !movieId) {
+    if (userId === null || movieId === null) {
         return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
     }
 
